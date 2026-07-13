@@ -1,0 +1,74 @@
+{
+  "version": "2026.2",
+  "description": "마할라노비스 거리 연산용 정상 가동 상태 베이스라인 (μ, Σ). 센서 벡터 순서: [가스 ppm, 전류 부하량 A, 주변 온도 °C]. 좌표는 Nominatim 기준 실주소 매핑.",
+  "featureOrder": ["gas_ppm", "current_amp", "temperature_c"],
+  "threshold": 3.0,
+  "factories": {
+    "hanwha-daejeon": {
+      "id": "hanwha-daejeon",
+      "name": "한화에어로스페이스 대전사업장",
+      "shortName": "한화 대전사업장",
+      "material": "나트륨",
+      "zone": "유성구 외삼동",
+      "address": "대전광역시 유성구 외삼로8번길 99",
+      "district": "유성구",
+      "lat": 36.3964305,
+      "lng": 127.3155357,
+      "meanVector": [35.0, 120.0, 27.0],
+      "covarianceMatrix": [
+        [49.0, 8.0, 2.0],
+        [8.0, 144.0, 5.5],
+        [2.0, 5.5, 7.84]
+      ],
+      "normalRanges": {
+        "gas_ppm": [15, 60],
+        "current_amp": [90, 150],
+        "temperature_c": [21, 33]
+      }
+    },
+    "munpyeong-parts": {
+      "id": "munpyeong-parts",
+      "name": "문평동 자동차부품공장",
+      "shortName": "문평 부품공장",
+      "material": "나트륨",
+      "zone": "대덕구 문평동",
+      "address": "대전광역시 대덕구 문평동 (대덕산단)",
+      "district": "대덕구",
+      "lat": 36.4456518,
+      "lng": 127.3998710,
+      "meanVector": [42.5, 185.0, 28.3],
+      "covarianceMatrix": [
+        [64.0, 12.5, 3.2],
+        [12.5, 225.0, 8.1],
+        [3.2, 8.1, 9.0]
+      ],
+      "normalRanges": {
+        "gas_ppm": [20, 70],
+        "current_amp": [140, 230],
+        "temperature_c": [22, 35]
+      }
+    },
+    "daedeok-sme": {
+      "id": "daedeok-sme",
+      "name": "대덕산단 영세공장",
+      "shortName": "대덕 영세공장",
+      "material": "일반가연물",
+      "zone": "대덕구 대화동",
+      "address": "대전광역시 대덕구 대화동 (대덕산업단지)",
+      "district": "대덕구",
+      "lat": 36.36957,
+      "lng": 127.40755,
+      "meanVector": [28.0, 95.0, 26.5],
+      "covarianceMatrix": [
+        [36.0, 5.0, 1.5],
+        [5.0, 100.0, 4.0],
+        [1.5, 4.0, 6.25]
+      ],
+      "normalRanges": {
+        "gas_ppm": [10, 50],
+        "current_amp": [70, 120],
+        "temperature_c": [20, 32]
+      }
+    }
+  }
+}

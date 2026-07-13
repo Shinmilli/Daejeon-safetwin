@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  font-family: "Pretendard", "IBM Plex Sans KR", "Noto Sans KR", system-ui, sans-serif;
+  background: #020617;
+  color: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #020617;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@keyframes fade-in-fast {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade-in-fast {
+  animation: fade-in-fast 0.1s ease-out forwards;
+}
+
+@keyframes score-drop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-score-drop {
+  animation: score-drop 0.6s ease-out;
+}
+
+@keyframes safetwin-ping {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* Leaflet markers: kill default white square chrome */
+.safetwin-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-container {
+  font: inherit;
+  background: #020617;
+}
+
+.st-wind {
+  color: #67e8f9;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 8px #083344;
+  transform: translate(-10px, -40px);
+}
+
+.st-fire-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transform: translateY(-8px);
+}
+
+.st-fire-dot {
+  position: relative;
+  width: 28px;
+  height: 28px;
+}
+
+.st-fire-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: #ef4444;
+  opacity: 0.55;
+  animation: safetwin-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  box-shadow: 0 0 24px #ef4444;
+}
+
+.st-fire-core {
+  position: relative;
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: #dc2626;
+  border: 2px solid #fff;
+  box-shadow: 0 0 20px #f87171;
+}
+
+.st-fire-card {
+  min-width: 180px;
+  text-align: center;
+  background: linear-gradient(180deg, #7f1d1d, #450a0a);
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  padding: 6px 10px;
+  box-shadow: 0 0 28px rgba(239, 68, 68, 0.55);
+}
+
+.st-fire-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #fecaca;
+}
+
+.st-fire-name {
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 2px;
+}
+
+.st-fire-meta {
+  font-size: 10px;
+  color: #fecaca;
+  margin-top: 2px;
+}
+
+.st-safe-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.st-safe-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+.st-safe-label {
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 600;
+  color: #e2e8f0;
+  background: rgba(2, 6, 23, 0.88);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 2px 7px;
+}

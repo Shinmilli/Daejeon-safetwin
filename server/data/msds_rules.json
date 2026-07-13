@@ -1,0 +1,42 @@
+{
+  "version": "2026.1",
+  "source": "환경부 화학물질안전원 MSDS / 소방청 위험물 대응 매뉴얼",
+  "rules": [
+    {
+      "material": "나트륨",
+      "aliases": ["sodium", "Na", "금속나트륨", "금수성 물질", "물반응성 물질"],
+      "cas": "7440-23-5",
+      "hazardClass": "금수성 물질 (Water-Reactive)",
+      "forbidden": ["물", "용수", "살수", "주수", "소화전", "포말(수성)", "CO2"],
+      "forbiddenPatterns": ["물\\s*분사", "용수\\s*진화", "살수\\s*진화", "주수\\s*소화"],
+      "optimal_agent": "마른 모래, 팽창 질석, 금속화재용 D급 소화약제",
+      "tacticalGuideline": "어떠한 경우에도 물 분사를 금지하며, 금속 화재용 마른 모래 또는 팽창 질석 차량을 후면 진입로에 전면 배치할 것",
+      "evacuationRadiusM": 350,
+      "notes": "나트륨은 물과 격렬히 반응하여 수소 가스를 발생시키고 폭발 위험이 있음. 절대 용수 진화 금지."
+    },
+    {
+      "material": "추진체",
+      "aliases": ["화약", "로켓추진체", "폭발성 물질"],
+      "cas": "N/A",
+      "hazardClass": "폭발성 물질",
+      "forbidden": ["충격", "마찰", "근접 살수"],
+      "forbiddenPatterns": ["직사\\s*주수", "근거리\\s*살수"],
+      "optimal_agent": "원거리 수성막포(AFFF), 냉각 방호수",
+      "tacticalGuideline": "충격·마찰을 피하고 원거리 냉각 방호 후 수성막포로 진압. 연쇄 폭발 대비 안전거리 확보.",
+      "evacuationRadiusM": 500,
+      "notes": "방산 공정 라인 추진체 취급 공장용 표준 대응."
+    },
+    {
+      "material": "일반가연물",
+      "aliases": ["목재", "플라스틱", "샌드위치패널"],
+      "cas": "N/A",
+      "hazardClass": "일반 가연물",
+      "forbidden": [],
+      "forbiddenPatterns": [],
+      "optimal_agent": "물, 수성막포",
+      "tacticalGuideline": "표준 용수 진화. 샌드위치 패널 구간은 조기 붕괴 대비 진입 제한.",
+      "evacuationRadiusM": 100,
+      "notes": "일반 화재 대응. 플래시오버·붕괴 타임라인 병행 모니터링."
+    }
+  ]
+}
