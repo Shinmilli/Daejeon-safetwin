@@ -40,20 +40,18 @@ function App() {
     setBusy(true);
     setToast('시연 트리거: 가스·전류 스파이크 → 마할라노비스 임계 초과');
     try {
-      // B2B에서 점수 추락 연출 후 B2G 작전모드
+      // B2B에서 점수·차트 스파이크 연출 후 B2G 작전모드
       setView('b2b');
       setDemoDrop(true);
-      // 한화 대전사업장 — 브랜드 인지 + 나트륨 RAG Hard Block 시연
       const factory = await triggerIncident('hanwha-daejeon');
       setFactories((prev) => prev.map((f) => (f.id === factory.id ? factory : f)));
       setSelectedId(factory.id);
 
-      // 0.1s 페이드인 작전 모드
       window.setTimeout(() => {
         setView('b2g');
         setOperationMode(true);
         setToast('작전 모드 전환 · 1초 레시피 RAG 가드레일 적용 완료');
-      }, 100);
+      }, 2200);
     } catch (e) {
       setToast(e instanceof Error ? e.message : '트리거 실패');
     } finally {
