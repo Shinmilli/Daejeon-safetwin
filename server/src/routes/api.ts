@@ -8,6 +8,14 @@ import {
 } from '../services/simulation.js';
 import { checkAnomaly } from '../ai/mahalanobis.js';
 import { generateTacticalRecipe } from '../ai/recipe.js';
+import {
+  enrichFactoryPublicData,
+  getGisOverlay,
+  getPrtr,
+  getPublicDataStatus,
+  getWeatherForFactory,
+  getBuildingForFactory,
+} from '../public-data/index.js';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -37,11 +45,11 @@ apiRouter.get('/factories/:id', (req, res) => {
 
 /**
  * POST /api/trigger-incident
- * body: { factoryId?: string } — 기본 한화에어로스페이스 대전
+ * body: { factoryId?: string }
  */
 apiRouter.post('/trigger-incident', async (req, res) => {
   try {
-    const factoryId = (req.body?.factoryId as string) || 'munpyeong-parts';
+    const factoryId = (req.body?.factoryId as string) || 'hanwha-daejeon';
     const factory = await triggerIncident(factoryId);
     res.json({
       ok: true,
@@ -68,7 +76,7 @@ apiRouter.post('/ai/check-anomaly', (req, res) => {
     factoryId?: string;
   };
   const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf-8'));
-  const id = factoryId || 'munpyeong-parts';
+  const id = factoryId || 'hanwha-daejeon';
   const f = baseline.factories[id];
   if (!f || !currentData) {
     res.status(400).json({ ok: false, error: 'currentData and valid factoryId required' });
@@ -91,4 +99,48 @@ apiRouter.post('/ai/recipe', async (req, res) => {
     zone || '대덕구 문평동',
   );
   res.json({ ok: true, recipe });
+});
+
+/* ───────── 공공데이터 실연동 ───────── */
+
+/** 연동 상태 요약 (심사위원 데모용) */
+apiRouter.get('/public-data/status', async (_req, res) => {
+  const status = await getPublicDataStatus();
+  res.json({ ok: true, status });
+});
+
+/** 기상청 초단기실황 */
+apiRouter.get('/public-data/weather', async (req, res) => {
+  const factoryId = String(req.query.factoryId || 'hanwha-daejeon');
+  const weather = await getWeatherForFactory(factoryId);
+  res.json({ ok: true, weather });
+});
+
+/** 건축물대장 표제부 */
+apiRouter.get('/public-data/building', async (req, res) => {
+  const factoryId = String(req.query.factoryId || 'hanwha-daejeon');
+  const building = await getBuildingForFactory(factoryId);
+  res.json({ ok: true, building });
+});
+
+/** PRTR (승인 전엔 캐시 폴백) */
+apiRouter.get('/public-data/prtr', async (_req, res) => {
+  const prtr = await getPrtr();
+  res.json({ ok: true, prtr });
+});
+
+/** 공장별 기상+건축 묶음 */
+apiRouter.get('/public-data/enrich/:factoryId', async (req, res) => {
+  const data = await enrichFactoryPublicData(req.params.factoryId);
+  res.json({ ok: true, data });
+});
+
+/**
+ * GIS 격자 가스확산 열지도 + 주민 우회 대피 경로
+ * (기상청 풍향·풍속 반영)
+ */
+apiRouter.get('/public-data/gis-overlay', async (req, res) => {
+  const factoryId = String(req.query.factoryId || 'hanwha-daejeon');
+  const data = await getGisOverlay(factoryId);
+  res.json({ ok: true, ...data });
 });

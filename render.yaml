@@ -1,0 +1,18 @@
+# Render Blueprint (선택) — Dashboard에서 수동 생성해도 됨
+services:
+  - type: web
+    name: safetwin-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: FRONTEND_ORIGIN
+        sync: false
+      - key: DATA_GO_KR_SERVICE_KEY
+        sync: false
+      - key: PRTR_ACCESS_KEY
+        sync: false

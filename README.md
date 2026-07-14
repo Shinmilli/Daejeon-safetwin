@@ -50,9 +50,29 @@ data/
 **Carto Dark Matter** 다크 타일 + 상태별 커스텀 마커 + 독성가스 열지도로 관제실 GIS를 구성합니다.  
 사고 시 해당 공장에 `⚠ 화재 진원 FIRE-IN` 라벨·네온 펄스·350m 대피 원이 표시되고 지도가 진원으로 이동합니다.
 
+## 공공데이터 실연동
+
+키 없이도 서버는 기동됩니다 (자동 mock/cache 폴백).  
+실연동은 `SETUP_PUBLIC_DATA.md` 체크리스트를 따라 `server/.env`에 키를 넣으면 됩니다.
+
+```bash
+cd server && cp .env.example .env
+# DATA_GO_KR_SERVICE_KEY=... 입력 후
+npm run dev
+curl -s http://localhost:4000/api/public-data/status | python3 -m json.tool
+```
+
+| API | 엔드포인트 |
+|-----|------------|
+| 상태 | `GET /api/public-data/status` |
+| 기상청 | `GET /api/public-data/weather?factoryId=hanwha-daejeon` |
+| 건축물대장 | `GET /api/public-data/building?factoryId=...` |
+| PRTR | `GET /api/public-data/prtr` |
+
 ## 심사 대응 포인트
 
 1. **마할라노비스**: `server/src/ai/mahalanobis.ts` + `factory_baseline.json`의 μ·Σ
 2. **RAG 가드레일**: `msds_rules.json`의 forbidden/optimal_agent → 나트륨 시 용수·살수 Hard Block
 3. **실시간성**: 서버 `setInterval` 3초 + 프론트 폴링 2초
 4. **InsurTech BM**: B2B 뷰의 112일 인증 / 24만원 절감 패널
+5. **공공 Open API**: 기상·건축물대장 실호출 + PRTR 캐시 폴백 (`SETUP_PUBLIC_DATA.md`)

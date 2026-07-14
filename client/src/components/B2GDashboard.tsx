@@ -20,7 +20,7 @@ export function B2GDashboard({ factories, selectedId, onSelect, operationMode }:
           <div>
             <h2 className="text-lg font-semibold text-white">B2G · 소방 관제실</h2>
             <p className="text-xs text-slate-400">
-              GIS 위험도 예찰 · 마할라노비스 1차 스크리닝 → 이상 시 작전 모드 전환
+              GIS 격자 가스확산 열지도 · 기상청 풍향 기반 주민 우회 대피 경로
             </p>
           </div>
           {operationMode && (

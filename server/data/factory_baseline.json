@@ -14,6 +14,13 @@
       "district": "유성구",
       "lat": 36.3964305,
       "lng": 127.3155357,
+      "buildingLookup": {
+        "sigunguCd": "30200",
+        "bjdongCd": "11500",
+        "bun": "0099",
+        "ji": "0000",
+        "note": "유성구 외삼동 — 번지 불일치 시 건축물대장 mock 폴백"
+      },
       "meanVector": [35.0, 120.0, 27.0],
       "covarianceMatrix": [
         [49.0, 8.0, 2.0],
@@ -36,6 +43,13 @@
       "district": "대덕구",
       "lat": 36.4456518,
       "lng": 127.3998710,
+      "buildingLookup": {
+        "sigunguCd": "30230",
+        "bjdongCd": "11100",
+        "bun": "0001",
+        "ji": "0000",
+        "note": "대덕구 문평동 — 정확한 본번/부번은 SETUP에서 수정"
+      },
       "meanVector": [42.5, 185.0, 28.3],
       "covarianceMatrix": [
         [64.0, 12.5, 3.2],
@@ -58,6 +72,13 @@
       "district": "대덕구",
       "lat": 36.36957,
       "lng": 127.40755,
+      "buildingLookup": {
+        "sigunguCd": "30230",
+        "bjdongCd": "10200",
+        "bun": "0001",
+        "ji": "0000",
+        "note": "대덕구 대화동"
+      },
       "meanVector": [28.0, 95.0, 26.5],
       "covarianceMatrix": [
         [36.0, 5.0, 1.5],
