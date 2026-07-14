@@ -61,60 +61,64 @@ function buildSpikeTail(prev: Point[], gas: number, current: number): Point[] {
 export function B2BDashboard({ factory, demoDrop }: Props) {
   const [history, setHistory] = useState<Point[]>([]);
   const seededForId = useRef<string | null>(null);
-  const spikedForUpdate = useRef<string | null>(null);
+  const didInitialSpike = useRef(false);
+  const factoryRef = useRef(factory);
+  factoryRef.current = factory;
 
+  // 공장 전환 시 베이스라인 시드
+  useEffect(() => {
+    if (!factory) return;
+    if (seededForId.current === factory.id) return;
+    seededForId.current = factory.id;
+    didInitialSpike.current = false;
+    setHistory(seedBaseline(factory));
+  }, [factory?.id, factory]);
+
+  // 폴링/트리거와 별개로 1.2초마다 오른쪽으로 스트리밍
   useEffect(() => {
     if (!factory) return;
 
-    // 공장 바뀌면 정상 시드 다시
-    if (seededForId.current !== factory.id) {
-      seededForId.current = factory.id;
-      spikedForUpdate.current = null;
-      setHistory(seedBaseline(factory));
-    }
+    const tick = () => {
+      const f = factoryRef.current;
+      if (!f) return;
 
-    const isSpike =
-      demoDrop ||
-      factory.incidentActive ||
-      factory.status === 'fire' ||
-      factory.sensors.gas_ppm > GAS_THRESHOLD ||
-      factory.sensors.current_amp > CURRENT_THRESHOLD;
+      const isSpike =
+        demoDrop ||
+        f.incidentActive ||
+        f.status === 'fire' ||
+        f.sensors.gas_ppm > GAS_THRESHOLD ||
+        f.sensors.current_amp > CURRENT_THRESHOLD;
 
-    if (isSpike) {
-      // 같은 사고에 대해 한 번만 스파이크 궤적 생성
-      const key = `${factory.id}:${factory.updatedAt}:spike`;
-      if (spikedForUpdate.current !== key) {
-        spikedForUpdate.current = key;
-        setHistory((prev) => {
-          const base = prev.length >= 8 ? prev : seedBaseline(factory);
-          return buildSpikeTail(base, factory.sensors.gas_ppm, factory.sensors.current_amp);
-        });
+      if (!isSpike) {
+        didInitialSpike.current = false;
       }
-      return;
-    }
 
-    // 정상 스트리밍
-    setHistory((prev) => {
-      const base = prev.length ? prev : seedBaseline(factory);
-      return [
-        ...base,
-        {
-          t: Date.now(),
-          gas: factory.sensors.gas_ppm,
-          current: factory.sensors.current_amp,
-        },
-      ].slice(-HISTORY_LEN);
-    });
-  }, [
-    factory?.id,
-    factory?.updatedAt,
-    factory?.sensors.gas_ppm,
-    factory?.sensors.current_amp,
-    factory?.incidentActive,
-    factory?.status,
-    demoDrop,
-    factory,
-  ]);
+      setHistory((prev) => {
+        let base = prev.length >= 8 ? prev : seedBaseline(f);
+
+        // 사고 시작 직후 1회: 임계선 돌파 상승 궤적
+        if (isSpike && !didInitialSpike.current) {
+          didInitialSpike.current = true;
+          return buildSpikeTail(base, f.sensors.gas_ppm, f.sensors.current_amp);
+        }
+
+        // 이후(정상·사고 유지 모두): 시간에 따라 점 추가 → 그래프가 계속 흐름
+        const jitter = isSpike ? (Math.random() - 0.5) * 8 : (Math.random() - 0.5) * 3;
+        return [
+          ...base,
+          {
+            t: Date.now(),
+            gas: Math.max(0, f.sensors.gas_ppm + jitter),
+            current: Math.max(0, f.sensors.current_amp + jitter * 1.5),
+          },
+        ].slice(-HISTORY_LEN);
+      });
+    };
+
+    tick();
+    const id = window.setInterval(tick, 1200);
+    return () => window.clearInterval(id);
+  }, [factory?.id, demoDrop, factory]);
 
   const score = factory?.safetyScore ?? 95;
   const grade = factory?.safetyGrade ?? 'A';
