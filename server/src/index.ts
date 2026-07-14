@@ -13,10 +13,10 @@ config({ path: join(__dirname, '../.env') });
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
 
-/** Netlify 등 프론트 도메인. 여러 개면 콤마로 구분 */
+/** Netlify 등 프론트 도메인. 여러 개면 콤마로 구분. 끝의 / 는 무시 */
 const frontendOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173')
   .split(',')
-  .map((s) => s.trim())
+  .map((s) => s.trim().replace(/\/$/, ''))
   .filter(Boolean);
 
 app.use(
@@ -27,14 +27,16 @@ app.use(
         cb(null, true);
         return;
       }
+      const normalized = origin.replace(/\/$/, '');
       if (
         frontendOrigins.includes('*') ||
-        frontendOrigins.includes(origin) ||
-        /^http:\/\/localhost:\d+$/.test(origin)
+        frontendOrigins.includes(normalized) ||
+        /^http:\/\/localhost:\d+$/.test(normalized)
       ) {
         cb(null, true);
         return;
       }
+      console.warn(`[Safe-Twin] CORS blocked: ${origin}`);
       cb(null, false);
     },
   }),
